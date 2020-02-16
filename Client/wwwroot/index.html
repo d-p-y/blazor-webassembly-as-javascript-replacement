@@ -1,24 +1,50 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+        <base href="/" />
+        <script type="text/javascript">
+            
+            window.evalDebug = function(code) {
+                console.log(code);
+                return window.eval(code);
+            }
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>blazorfun</title>
-    <base href="/" />
-    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/site.css" rel="stylesheet" />
-</head>
+            window.elementsRef = new Map();
+                
+            window.getElementRefById = function(id) {
+                var result = window.elementsRef.get(id);
 
-<body>
-    <app>Loading...</app>
+                if (result === undefined) {
+                    result = document.getElementById(id);
+                }
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
-    <script src="_framework/blazor.webassembly.js"></script>
-</body>
+                if (result === undefined) {
+                    console.log("cannot find element having id=" + id);
+                }
 
+                return result;
+            };
+
+            window.nextId = "1";
+
+            window.generateNextId = function () {
+                var cpy = window.nextId;
+                window.nextId = ((window.nextId + 0) + 1) + "";
+                return cpy;
+            };
+            
+            document.addEventListener("DOMContentLoaded", function () {
+                console.log("dom is ready");
+
+                document.body.id = window.generateNextId() + "";
+
+                console.log("document.body.id is "+document.body.id);
+            });
+        </script>
+        <script src="_framework/blazor.webassembly.js">
+        </script>
+    </head>
+    <body></body>
 </html>
