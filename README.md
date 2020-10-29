@@ -3,6 +3,10 @@
 ## Goal
 Check feasibility of using Blazor WebAssembly as replacement of TypeScript or [Bridge.NET](https://github.com/bridgedotnet/Bridge/) to interact directly with DOM. In other words: try to leverage Blazor WebAssembly without hosted components model, [life cycle events resembling classic aspnet](https://blazor-university.com/javascript-interop/calling-javascript-from-dotnet/passing-html-element-references/), routing, DI etc.
 
+### Outcome as of 2020-10 
+
+Firefox and Chrome now both support [reference types spec](https://github.com/WebAssembly/reference-types). Still latest Blazor Webassembly doesn't seem to use it.
+
 ### Outcome as of 2020-01 
 WebAssembly cannot reference DOM objects or references to javascript functions. Because of this, hacks (such as Document._callbacks as seen in Program.cs) are currently needed. Because of this routing+components model of Blazor WebAssembly is at this stage not only a convenience but is a necessity. References to non primitive objects are stored within `window` object so that WebAssembly can find it back later by using some primitive key (such as string). Existence of such collections mean that there needs to be some explicit cleanup process to get rid of not-used-anymore references. Blazor WebAssembly's routing+components works around this problem by introducing a lot of abstractions and [discouraging to try to access DOM directly](https://github.com/dotnet/aspnetcore/issues/15830).
 

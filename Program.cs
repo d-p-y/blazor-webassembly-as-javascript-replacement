@@ -58,6 +58,7 @@ namespace blazorfun {
 
         public static IDictionary<int, Action<object>> _callbacks = new Dictionary<int, Action<object>>();
 
+        public static object bodyAsObj => Js.Invoke<object>("evalDebug", "document.body");
         public static HtmlElement body => HtmlElement.FromId(Js.Invoke<string>("evalDebug", "document.body.id"));
 
         public static HtmlElement createElement(string name) {
@@ -109,6 +110,22 @@ namespace blazorfun {
 
                 Log($"body has id={Document.body.Id} and tagname is {Document.body.tagName}");
 
+                var body = Document.bodyAsObj;
+                Log($"has body as not null object? {body != null}");
+
+                var gotId = false;
+                try {
+                    var idVal = Document.Js.Invoke<string>("evalDebug", "arguments[0].id", body);
+                    if (idVal != null) {
+                        Log($"success: can use bodyAsObj as reference. Got body.id value={idVal}");
+                    } else {
+                        Log("failed: can not use bodyAsObj as reference because JS gets something that is not an original reference having id property");
+                    }
+
+                } catch (Exception ex) {
+                    Log($"fail: can not use bodyAsObj as reference. Got exception={ex}");
+                }
+                
                 Window.alert("hi there");
 
                 var y = Document.createElement("div");

@@ -6,9 +6,11 @@
     <base href="/" />
     <script type="text/javascript">
 
-        window.evalDebug = function (code) {
-            console.log(code);
-            return window.eval(code);
+        window.evalDebug = function (code, p0, p1, p2) {
+            code = "return " + code;
+            console.log("constructing function with code=["+code+"] args=[" + p0 + ";" + p1 + ";" + p2 + "]");
+            var f = new Function(code);
+            return f.call(this, p0, p1, p2);
         }
 
         window.elementsRef = new Map();
@@ -46,6 +48,6 @@
     <script src="_framework/blazor.webassembly.js">
     </script>
 </head>
-<body>
+<body id="someId">
 </body>
 </html>
