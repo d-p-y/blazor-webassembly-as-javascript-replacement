@@ -3,7 +3,11 @@
 ## Goal
 Check feasibility of using Blazor WebAssembly as replacement of TypeScript or [Bridge.NET](https://github.com/bridgedotnet/Bridge/) to interact directly with DOM. In other words: try to leverage Blazor WebAssembly without hosted components model, [life cycle events resembling classic aspnet](https://blazor-university.com/javascript-interop/calling-javascript-from-dotnet/passing-html-element-references/), routing, DI etc.
 
-### Outcome as of 2021-03
+### Outcome as of 2021-03-05 afternoon
+
+Thanks to [help of aspnet maintainers](https://github.com/dotnet/aspnetcore/issues/30687) I was able to make passing JS references work. Good! continuing effort in `POC` branch. It seems that biggest pain is gone. Now it looks workable. Maybe somewhat annoying to have to create JS stubs for callbacks-to-dotnet. TBD.
+
+### Outcome as of 2021-03-05 morning
 
 It seems that JavaScript reference is passed to dotnet. Such reference, by design, is supposed to be opaque - WASM may not get its properties or invoke it in any way. All I can tell, is that `document.body` that I pass from JavaScript to C#/mono/WASM is not null. Afterwards I pass it back to JavaScript hoping that in JavaScript it will be indistinguishable from `document.body`. For sake of test I just try to get `id` property. What I actually see passed to JavaScript in my test is some sort of `Object` that definitively is not a document.body. It resembles simplest object constructed by calling `eval('{}')`
 
