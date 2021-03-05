@@ -100,8 +100,7 @@ namespace blazorfun {
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             var host = builder.Build();
-
-
+            
             _js = (IJSInProcessRuntime)host.Services.GetRequiredService<IJSRuntime>();
             Document.Js = _js;
             Log("Log message originating from dotnet");
@@ -110,44 +109,38 @@ namespace blazorfun {
                 Log($"body has id={Document.body.Id} and tagname is {Document.body.tagName}");
                 
                 var body = Document.bodyAsObj;
-                Log($"has body as not null object? {body != null}");
-                Log($"body as string {body}");
+                Log($"is body a-not-null-object={body != null} toString={body}");
+                Log("now passing body back to JavaScript asking it to retrieve 'id' property");
 
                 var gotId = false;
                 try {
                     var idVal = Document.Js.Invoke<string>("evalDebug", "arguments[0].id", body);
                     if (idVal != null) {
-                        Log($"success: can use bodyAsObj as reference. Got body.id value={idVal}");
+                        Log($"success: can use bodyAsObj as opaque reference to HTMLElement. Got body.id value={idVal}");
                     } else {
-                        Log("failed: can not use bodyAsObj as reference because JS gets something that is not an original reference having id property");
+                        Log("failed: can not use bodyAsObj as opaque reference to HTMLElement because JS gets something that is not an original reference having id property");
                     }
 
                 } catch (Exception ex) {
                     Log($"fail: can not use bodyAsObj as reference. Got exception={ex}");
                 }
-
-                Window.alert("hi there");
-
+                
                 var y = Document.createElement("div");
                 y.textContent = "click me";
                 var cnt = 0;
                 _onClickedCallbackId = y.addEventListener("click", x => {
                     cnt++;
-                    Log($"'click me' clicked {cnt}");
-
-                    y.textContent = $"clicked {cnt} times. click me again";
-
-                    if (cnt > 5) {
-                        Log($"removing due to counter {cnt}");
-                        y.textContent = "don't click me anymore";
-                        y.removeEventListener(_onClickedCallbackId);
+                    Log($"'click me' clicked {cnt} times");
+                    
+                    if (cnt <= 5) {
+                        y.textContent = $"clicked {cnt} times. click me again";
+                    } else {
+                        y.textContent = "click to show alert";
+                        Window.alert("hi there");
                     }
                 });
                 Document.body.appendChild(y);
             });
-
-
-
 
             await host.RunAsync();
         }
