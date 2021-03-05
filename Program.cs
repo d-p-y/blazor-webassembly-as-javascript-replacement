@@ -2,11 +2,8 @@ using System;
 using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 
 /* see README.md for reasoning behind this code */
@@ -14,7 +11,6 @@ namespace blazorfun {
     public static class StringExtensions {
         public static string EscapeJsStringForSingleQuote(this string self) => self.Replace("'", "\\'");
     }
-
     public class HtmlElement {
         /// <summary>id is actually a number</summary>
         public string Id { get; private set; }
@@ -100,18 +96,22 @@ namespace blazorfun {
 
         public static async Task Main(string[] args) {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
             var host = builder.Build();
 
+
+            _js = (IJSInProcessRuntime)host.Services.GetRequiredService<IJSRuntime>();
+            Document.Js = _js;
+            Log("Log message originating from dotnet");
+
             await Task.Run(async () => {
-                _js = (IJSInProcessRuntime)host.Services.GetRequiredService<IJSRuntime>();
-                Document.Js = _js;
-
-                Log("!@#!@#!@#!@#");
-
                 Log($"body has id={Document.body.Id} and tagname is {Document.body.tagName}");
-
+                
                 var body = Document.bodyAsObj;
                 Log($"has body as not null object? {body != null}");
+                Log($"body as string {body}");
 
                 var gotId = false;
                 try {
@@ -125,7 +125,7 @@ namespace blazorfun {
                 } catch (Exception ex) {
                     Log($"fail: can not use bodyAsObj as reference. Got exception={ex}");
                 }
-                
+
                 Window.alert("hi there");
 
                 var y = Document.createElement("div");
@@ -145,6 +145,9 @@ namespace blazorfun {
                 });
                 Document.body.appendChild(y);
             });
+
+
+
 
             await host.RunAsync();
         }

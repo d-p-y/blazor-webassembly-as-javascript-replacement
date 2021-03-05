@@ -1,14 +1,18 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>blazorfun</title>
     <base href="/" />
+    <link rel="shortcut icon" href="#" />
+    <script src="_framework/blazor.webassembly.js"></script>
     <script type="text/javascript">
 
         window.evalDebug = function (code, p0, p1, p2) {
             code = "return " + code;
-            console.log("constructing function with code=["+code+"] args=[" + p0 + ";" + p1 + ";" + p2 + "]");
+            console.log("constructing function with code=[" + code + "] args=[" + p0 + ";" + p1 + ";" + p2 + "]");
             var f = new Function(code);
             return f.call(this, p0, p1, p2);
         }
@@ -45,9 +49,6 @@
             console.log("document.body.id is " + document.body.id);
         });
     </script>
-    <script src="_framework/blazor.webassembly.js">
-    </script>
 </head>
-<body id="someId">
-</body>
+<body id="someId"></body>
 </html>
