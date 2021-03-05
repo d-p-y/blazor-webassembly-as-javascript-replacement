@@ -54,7 +54,7 @@ namespace blazorfun {
 
         public static IDictionary<int, Action<object>> _callbacks = new Dictionary<int, Action<object>>();
 
-        public static object bodyAsObj => Js.Invoke<object>("evalDebug", "document.body");
+        public static IJSObjectReference bodyAsObj => Js.Invoke<IJSObjectReference>("evalDebug", "document.body");
         public static HtmlElement body => HtmlElement.FromId(Js.Invoke<string>("evalDebug", "document.body.id"));
 
         public static HtmlElement createElement(string name) {
