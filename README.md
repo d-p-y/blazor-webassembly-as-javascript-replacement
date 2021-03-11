@@ -5,7 +5,7 @@ Check feasibility of using Blazor WebAssembly as replacement of TypeScript or [B
 
 ### Outcome as of 2021-03-05 afternoon
 
-Thanks to [help of aspnet maintainers](https://github.com/dotnet/aspnetcore/issues/30687) I was able to make passing JS references work. Good! continuing effort in `POC` branch. It seems that biggest pain is gone. Now it looks workable. Maybe somewhat annoying to have to create JS stubs for callbacks-to-dotnet. TBD.
+Thanks to [help of aspnet maintainers](https://github.com/dotnet/aspnetcore/issues/30687) I was able to make passing JS references work. Good! It seems that biggest pain is gone. Now it looks workable. Still maybe somewhat annoying is to have to create JS stubs for callbacks-to-dotnet but that is how WASM's access to 'outside world' works nowadays.
 
 ### Outcome as of 2021-03-05 morning
 
